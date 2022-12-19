@@ -32,3 +32,6 @@
   (partial sum-priorities (partial partition 3)))
 
 
+(def a #{1 2 3})
+(def b #{1 2})
+(filter a b)
