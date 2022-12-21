@@ -19,7 +19,7 @@
   (or (st/subset? r1 r2)
       (st/subset? r2 r1)))
 
-(defn- parse-ranges [line]
+(defn parse-ranges [line]
   (->> line
        split-at-comma
        split-at-dash
