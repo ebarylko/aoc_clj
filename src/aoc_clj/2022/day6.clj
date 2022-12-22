@@ -8,7 +8,6 @@
        ffirst
        (+ size)))
 
-
 (def packet-marker-size
     (partial find-marker-size 4))
 
