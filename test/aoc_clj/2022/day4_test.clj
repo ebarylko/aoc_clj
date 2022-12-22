@@ -40,6 +40,29 @@
               (t/is (= (set (range a (inc b))) fst))
               (t/is (= (set (range c (inc d))) snd))   )))
 
+(def set-range-gen
+  (->> range-gen
+       (gen/fmap (fn [[start end]] (set (range start (inc end)))))))
+
+(gen/sample set-range-gen)
+
+(def sub-set-gen
+  (gen/let [[a b] range-gen
+             i (gen/choose 0 (- b a)) ]
+    [(set (range (+ a i) b))
+     (set (range a (inc b )))
+     ]))
+
+(gen/sample sub-set-gen)
+
+(t/deftest in-another-range?-test
+  (checking "returns true if one range is a subset of the other"
+            1000
+            [args sub-set-gen]
+            (t/is (sut/in-another-range? args))
+            (t/is (sut/in-another-range? args))
+            ))
+
 (t/deftest contained-ranges-test
   (t/is (= 2 (sut/contained-ranges sample)))
   (t/is (= 524 (sut/contained-ranges input))))
