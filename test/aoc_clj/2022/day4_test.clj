@@ -33,13 +33,12 @@
 (gen/sample range-gen)
 (gen/generate range-gen)
 (t/deftest parse-ranges-test
-  (checking "Ranges count matches difference between min and max" 100
+  (checking "Ranges count matches difference between min and max" 1000
             [[a b] range-gen
              [c d] range-gen]
             (let [[fst snd] (sut/parse-ranges (format "%d-%d,%d-%d" a b c d))]
-              (t/is (= (inc (- b a)) (count fst)))
-              (t/is (= (inc (- d c)) (count snd)))
-                 )))
+              (t/is (= (set (range a (inc b))) fst))
+              (t/is (= (set (range c (inc d))) snd))   )))
 
 (t/deftest contained-ranges-test
   (t/is (= 2 (sut/contained-ranges sample)))
