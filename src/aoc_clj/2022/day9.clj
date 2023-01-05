@@ -1,30 +1,18 @@
-(ns aoc-clj.2022.day1)
+(ns aoc-clj.2022.day9
+  (:require [clojure.string :as s]))
 
-(defn- calories? [coll]
-  (seq (first coll)))
+(defn positions-visited [motions]
+  )
 
-(defn- calc-total [coll]
-  (->> coll
-       (map read-string)
-       (apply +)))
+(def ->usable-motion
+  (comp #(vector (first %) (read-string (second %)))
+     #(s/split % #" ")))
 
-(defn list->calories [input]
-  (->> input 
-       (partition-by empty?)
-       (filter calories?)
-       (map calc-total)))
-
-(defn max-calories [input]
-  (->> input
-       (list->calories)
-       (apply max)))
-
-
-(defn sum-max-calories [input]
-  (->> input
-       (list->calories)
-       (sort >)
-       (take 3)
-       (apply +)))
-  
+(defn move-head [head motion]
+  (let [[direction distance] (->usable-motion motion)]
+    (case direction
+      "R" (update head 0 + distance)
+      "L" (update head 0 - distance)
+      "U" (update head 1 + distance)
+      "D" (update head 1 - distance))))
 

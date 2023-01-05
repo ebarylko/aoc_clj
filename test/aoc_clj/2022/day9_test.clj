@@ -1,37 +1,36 @@
-(ns aoc-clj.2022.day1-test
-  (:require [aoc-clj.2022.day1 :as sut]
+(ns aoc-clj.2022.day9-test
+  (:require [aoc-clj.2022.day9 :as sut]
             [clojure.string :as s]
             [clojure.test :as t]))
 
 (def input
-  (->> "resources/2022/day1.txt"
+  (->> "resources/2022/day9.txt"
        slurp
        s/split-lines
-       
   ))
 
 (def sample
-  ["1000"
-   "2000"
-   "3000"
-   ""
-   "4000"
-   ""
-   "5000"
-   "6000"
-   ""
-   "7000"
-   "8000"
-   "9000"
-   ""
-   "10000"]
-)
+  ["R 4"
+   "U 4"
+   "L 3"
+   "D 1"
+   "R 4"
+   "D 1"
+   "L 5"
+   "R 2"])
 input
 
-(t/deftest max-calories-test
-  (t/is (= 24000 (sut/max-calories sample)))
-  (t/is (= 71780 (sut/max-calories input))))
+(t/deftest move-head-test
+  (t/is (= [4 0]
+           (sut/move-head [0 0] "R 4")))
+  (t/is (= [7 7]
+           (sut/move-head [7 3] "U 4")))
+  (t/is (= [-2 0]
+           (sut/move-head [2 0] "L 4")))
+  (t/is (= [3 5]
+           (sut/move-head [3 9] "D 4")))
+  )
 
-(t/deftest sum-max-calories-test
-  (t/is (= 45000 (sut/sum-max-calories sample)))
-  (t/is (= 212489 (sut/sum-max-calories input))))
+(t/deftest positions-visited-test
+  (t/is (= 13
+           (sut/positions-visited sample))))
