@@ -31,6 +31,18 @@ input
            (sut/move-head [3 9] "D 4")))
   )
 
+(t/deftest touching?-test
+  (t/is (sut/touching? [ [2 2] [2 1]]))
+  (t/is (sut/touching? [ [2 2] [3 2]]))
+  (t/is (sut/touching? [ [2 2] [1 2]]))
+  (t/is (sut/touching? [ [2 2] [3 3]]))
+  (t/is (not (sut/touching? [ [2 2] [0 0]])))
+  (t/is (not (sut/touching? [ [2 2] [9 0]]))))
+
+(t/deftest move-tail-test
+  (t/is (= []
+           (sut/move-tail [ [2 2] [2 1]]))))
+
 (t/deftest positions-visited-test
   (t/is (= 13
            (sut/positions-visited sample))))

@@ -16,3 +16,20 @@
       "U" (update head 1 + distance)
       "D" (update head 1 - distance))))
 
+
+(conj [1 2 3] [])
+
+
+(defn move-tail [[head tail]]
+
+  )
+
+(def relative-poses (for [x (range -1 2)
+      y (range -1 2)]
+  [x y]))
+
+
+
+(defn touching? [[head tail]]
+  (let [next-to-head (set (map (partial map + head) relative-poses))]
+    (next-to-head tail)))
