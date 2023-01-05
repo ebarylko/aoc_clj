@@ -32,16 +32,32 @@ input
   )
 
 (t/deftest touching?-test
-  (t/is (sut/touching? [ [2 2] [2 1]]))
-  (t/is (sut/touching? [ [2 2] [3 2]]))
-  (t/is (sut/touching? [ [2 2] [1 2]]))
-  (t/is (sut/touching? [ [2 2] [3 3]]))
-  (t/is (not (sut/touching? [ [2 2] [0 0]])))
-  (t/is (not (sut/touching? [ [2 2] [9 0]]))))
+  (t/is (sut/touching?  [2 2] [2 1]))
+  (t/is (sut/touching?  [2 2] [3 2]))
+  (t/is (sut/touching?  [2 2] [1 2]))
+  (t/is (sut/touching?  [2 2] [3 3]))
+  (t/is (not (sut/touching?  [2 2] [0 0])))
+  (t/is (not (sut/touching?  [2 2] [9 0]))))
+
+(t/deftest tail-above-head?-test
+  (t/is (sut/tail-above-head? 0 2))
+  (t/is (not (sut/tail-above-head? 2 0))))
+
+
 
 (t/deftest move-tail-test
   (t/is (= []
-           (sut/move-tail [ [2 2] [2 1]]))))
+           (sut/move-tail [ [2 2] [2 1]])))
+  (t/is (= [[2 1]]
+           (sut/move-tail [ [2 2] [2 0]])))
+  (t/is (= [[2 3] [2 4]]
+           (sut/move-tail [ [2 2] [2 5]])))
+  (t/is (= [[1 2] [2 2]]
+           (sut/move-tail [ [0 2] [3 2]])))
+  (t/is (= [[3 2] [4 2]]
+           (sut/move-tail [ [5 2] [2 2]])))
+
+  )
 
 (t/deftest positions-visited-test
   (t/is (= 13
