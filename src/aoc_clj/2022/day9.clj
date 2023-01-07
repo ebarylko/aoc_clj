@@ -53,24 +53,42 @@
     (gen-poses b (inc a) c rseq)
     (gen-poses b (inc c) a rseq)))
 
+(defn north-east? [head tail]
+  (let [[x y] (map - tail head)]
+    (and (pos? x) (pos? y))))
+
+(defn south-east? [head tail]
+  (let [[x y] (map - tail head)]
+    (and (pos? x) (neg? y))))
+
+(defn north-west? [head tail]
+  (let [[x y] (map - tail head)]
+    (and (neg? x) (pos? y))))
+
+(defn  south-west? [head tail]
+  (let [[x y] (map - tail head)]
+    (and (neg? x) (neg? y))))
+
+(defn- gen-diagonal-poses [[a b :as head] [c d :as tail]]
+  (cond
+    (north-east? head tail) (gen-poses a (inc b) d identity)
+    (south-east? head tail) (gen-poses a (inc d) b  identity)
+    (north-west? head tail) (gen-poses  a (inc b) d identity)
+    (south-west? head tail) (gen-poses a (inc d) b identity)))
+
 (defn- positions-touched [head tail]
   (cond
     (same-column? head tail) (gen-column-poses head tail)
-    (same-row? head tail) (gen-row-poses head tail)))
+    (same-row? head tail) (gen-row-poses head tail)
+    :else  (gen-diagonal-poses head tail)))
 
 (defn move-tail [[head tail]]
 (if (touching? head tail)
   []
  (positions-touched head tail)))
 
-
-
-(def a (range 1 9))
-
-(map (partial vector 3) a)
-                                        ; [1 3] [1 0]
-                                        ; [1 0] [1 3]:wa
-
-(range 1 0 -1)
-(rseq [1 2 3])
-(map (comp rseq (partial vector 2)) [ 1 2 3])
+(north-east?  [0 2] [4 3] )
+(move-tail [ [0 2] [4 3] ])
+(touching? [0 2] [4 3])
+(map - [1  3] [0 0])
+(range 3 3)

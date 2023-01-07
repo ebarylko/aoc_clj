@@ -43,7 +43,21 @@ input
   (t/is (sut/tail-above-head? 0 2))
   (t/is (not (sut/tail-above-head? 2 0))))
 
+(t/deftest north-east?-test
+  (t/is (sut/north-east?  [0 0] [1 3]))
+  (t/is (not (sut/north-east? [1 3] [0 0]))))
 
+(t/deftest south-east?-test
+  (t/is (sut/south-east?  [0 0] [1 -4]))
+  (t/is (not (sut/south-east? [1 3] [0 0]))))
+
+(t/deftest north-west?-test
+  (t/is (sut/north-west?  [0 0] [-1 4]))
+  (t/is (not (sut/north-west? [3 90] [2 9]))))
+
+(t/deftest south-west?-test
+  (t/is (sut/south-west?  [0 0] [-1 -4]))
+  (t/is (not (sut/south-west? [1 90] [2 9]))))
 
 (t/deftest move-tail-test
   (t/is (= []
@@ -56,8 +70,16 @@ input
            (sut/move-tail [ [0 2] [3 2]])))
   (t/is (= [[3 2] [4 2]]
            (sut/move-tail [ [5 2] [2 2]])))
-
-  )
+  (t/is (= [[0 1] [0 2]]
+           (sut/move-tail [ [0 0] [1 3]])))
+  (t/is (= [[0 -3] [0 -2] [0 -1]]
+           (sut/move-tail [ [0 0] [1 -4]])))
+  (t/is (= [[1 2] [1 3]]
+           (sut/move-tail [ [1 1] [0 4]])))
+  (t/is (= [[1 -3] [1 -2] [1 -1] [1 0]]
+           (sut/move-tail [ [1 1] [0 -4]])))
+  (t/is (= [[1 -3] [1 -2] [1 -1] [1 0]]
+         (sut/move-tail [ [0 2] [4 3]]))))
 
 (t/deftest positions-visited-test
   (t/is (= 13
