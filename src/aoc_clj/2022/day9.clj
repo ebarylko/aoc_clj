@@ -92,13 +92,8 @@
        (map (partial * 0.5))
        (map correct-pos)
        (map + tail)
-       (map int))
-  #_(cond
-    (same-column? head tail) (gen-column-poses head tail)
-    (same-row? head tail) (gen-row-poses head tail)
-    :else  (gen-diagonal-poses head tail)))
+       (map int)))
 
-(int 2.0)
 
 (defn move-tail [[head tail]]
 (if (touching? head tail)
@@ -115,3 +110,13 @@
 (touching? [0 2] [4 3])
 (map - [1  3] [0 0])
 (range 3 3)
+
+(defn follow-motion [[tail tail-positions head-positions]]
+  (conj
+   (reduce
+   (fn [[tail-pos tail-history] head-pos]
+     [(move-tail [head-pos tail-pos])
+      (conj tail-history (move-tail [head-pos tail-pos]))])
+   [tail tail-positions]
+   head-positions)
+   (last head-positions)))
