@@ -1,8 +1,6 @@
 (ns aoc-clj.2022.day9
   (:require [clojure.string :as s]))
 
-(defn positions-visited [motions]
-  )
 
 (def ->usable-motion
   (comp #(vector (first %) (read-string (second %)))
@@ -21,9 +19,6 @@
       "D"((move-in-direction head 1 -) intermediate-steps))))
 
 
-;; (def relative-poses (for [x (range -1 2)
-;;                           y (range -1 2)]
-;;                       [x y]))
 
 (defn touching? [[a b :as head] [c d :as tail]]
   (let [x (- c a)
@@ -100,23 +95,39 @@
   tail
  (positions-touched head tail)))
 
-(positions-touched [0 0] [1 2])
-(map - [2 0] [2 2])
-(map - [0 0] [1 2])
-(map - [0 0] [1 2])
-(map #(Math/ceil %) (map (partial * 0.5) [-1 -2]))
-(north-east?  [0 2] [4 3] )
-(move-tail [ [0 2] [4 3] ])
-(touching? [0 2] [4 3])
-(map - [1  3] [0 0])
-(range 3 3)
 
-(defn follow-motion [[tail tail-positions head-positions]]
-  (conj
+(defn follow-motion [[tail tail-positions :as tail-info] head-positions]
+  ;(conj
    (reduce
    (fn [[tail-pos tail-history] head-pos]
      [(move-tail [head-pos tail-pos])
       (conj tail-history (move-tail [head-pos tail-pos]))])
    [tail tail-positions]
    head-positions)
-   (last head-positions)))
+   #_(last head-positions))
+
+                                        ;destructure so last alreadt part of head-positions?
+
+
+(defn gen-head-poses [motions]
+  (first (reduce
+   (fn [[head-positions head] motion]
+     (let [new-poses (move-head head motion)
+           new-head (last new-poses)]
+     [(conj head-positions new-poses) new-head]))
+   [[] [0 0]]
+   motions)))
+
+(defn follow-motions [[tail tail-poses] motions]
+  (reduce
+   follow-motion
+   [tail tail-poses]
+   (gen-head-poses motions)))
+
+(defn positions-visited [motions]
+  (->> motions
+       (follow-motions [[0 0] []])
+       ( (comp set second))
+       count) )
+
+(set [ [1 2] '(1 2) [1 3]])

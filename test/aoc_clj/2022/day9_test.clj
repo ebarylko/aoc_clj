@@ -78,12 +78,27 @@ input
            (sut/move-tail [ [0 0] [-2 1]]))))
 
 (t/deftest  follow-motion-test
-  (t/is (= [[3 0] [ [0 0] [1 0] [2 0] [3 0]] [4 0]]
-           (sut/follow-motion [[0 0] [] [[1 0] [2 0] [3 0] [4 0]]])))
-  (t/is (= [ [4 3] [ [0 0] [1 0] [2 0] [3 0] [3 0] [4 1] [4 2] [4 3]] [4 4]]
+  (t/is (= [[3 0] [ [0 0] [1 0] [2 0] [3 0]]]
+           (sut/follow-motion [[0 0] []] [[1 0] [2 0] [3 0] [4 0]])))
+  (t/is (= [ [4 3] [ [0 0] [1 0] [2 0] [3 0] [3 0] [4 1] [4 2] [4 3]]]
            (sut/follow-motion 
-            [[3 0] [ [0 0] [1 0] [2 0] [3 0]] [[4 1] [4 2] [4 3] [4 4]]]))))
+            [[3 0] [ [0 0] [1 0] [2 0] [3 0]]] [[4 1] [4 2] [4 3] [4 4]]))))
+
+(t/deftest gen-head-poses-test
+  (t/is (= [ [ [1 0] [2 0] [3 0] [4 0] ] [ [4 1] [4 2] [4 3] [4 4] ]]
+           (sut/gen-head-poses ["R 4"
+                                "U 4"]))))
+
+(sut/gen-head-poses sample)
+
+(t/deftest follow-motions-test
+  (t/is (= [ [4 3] [[0 0] [1 0] [2 0] [3 0] [3 0] [4 1] [4 2] [4 3]]]
+           (sut/follow-motions [[0 0] []] ["R 4"
+                                          "U 4"]))))
+(sut/follow-motions [[0 0] []] sample)
 
 (t/deftest positions-visited-test
   (t/is (= 13
-           (sut/positions-visited sample))))
+           (sut/positions-visited sample)))
+  (t/is (= 13
+           (sut/positions-visited input))) )
