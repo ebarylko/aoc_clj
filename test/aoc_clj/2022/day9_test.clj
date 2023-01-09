@@ -21,13 +21,13 @@
 input
 
 (t/deftest move-head-test
-  (t/is (= [4 0]
+  (t/is (= [[1 0] [2 0] [3 0][4 0]]
            (sut/move-head [0 0] "R 4")))
-  (t/is (= [7 7]
+  (t/is (= [ [7 4] [7 5] [7 6][7 7]]
            (sut/move-head [7 3] "U 4")))
-  (t/is (= [-2 0]
+  (t/is (= [ [1 0] [0 0] [-1 0] [-2 0] ]
            (sut/move-head [2 0] "L 4")))
-  (t/is (= [3 5]
+  (t/is (= [ [3 8] [3 7] [3 6] [3 5] ]
            (sut/move-head [3 9] "D 4")))
   )
 
@@ -60,26 +60,25 @@ input
   (t/is (not (sut/south-west? [1 90] [2 9]))))
 
 (t/deftest move-tail-test
-  (t/is (= []
+  (t/is (= [2 1]
            (sut/move-tail [ [2 2] [2 1]])))
-  (t/is (= [[2 1]]
+  (t/is (= [2 1]
            (sut/move-tail [ [2 2] [2 0]])))
-  (t/is (= [[2 3] [2 4]]
-           (sut/move-tail [ [2 2] [2 5]])))
-  (t/is (= [[1 2] [2 2]]
-           (sut/move-tail [ [0 2] [3 2]])))
-  (t/is (= [[3 2] [4 2]]
-           (sut/move-tail [ [5 2] [2 2]])))
-  (t/is (= [[0 1] [0 2]]
-           (sut/move-tail [ [0 0] [1 3]])))
-  (t/is (= [[0 -3] [0 -2] [0 -1]]
-           (sut/move-tail [ [0 0] [1 -4]])))
-  (t/is (= [[1 2] [1 3]]
-           (sut/move-tail [ [1 1] [0 4]])))
-  (t/is (= [[1 -3] [1 -2] [1 -1] [1 0]]
-           (sut/move-tail [ [1 1] [0 -4]])))
-  (t/is (= [[1 -3] [1 -2] [1 -1] [1 0]]
-         (sut/move-tail [ [0 2] [4 3]]))))
+  (t/is (= [2 3]
+           (sut/move-tail [ [2 2] [2 4]])))
+  (t/is (= [2 2]
+           (sut/move-tail [ [1 2] [3 2]])))
+  ;; (t/is (= [[3 2] [4 2]]
+  ;;          (sut/move-tail [ [5 2] [2 2]])))
+  (t/is (= [0 1]
+           (sut/move-tail [ [0 0] [1 2]])))
+  (t/is (= [0 -1] 
+           (sut/move-tail [ [0 0] [1 -2]])))
+  (t/is (= [0 -1]
+           (sut/move-tail [ [0 0] [-1 -2]])))
+  (t/is (= [-1 0]
+           (sut/move-tail [ [0 0] [-2 1]])))
+  )
 
 (t/deftest positions-visited-test
   (t/is (= 13

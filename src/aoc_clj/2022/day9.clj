@@ -8,23 +8,28 @@
   (comp #(vector (first %) (read-string (second %)))
      #(s/split % #" ")))
 
+(defn move-in-direction [head pos f]
+  (partial map (partial update head pos f)))
+
 (defn move-head [head motion]
-  (let [[direction distance] (->usable-motion motion)]
+  (let [[direction distance] (->usable-motion motion)
+        intermediate-steps (range 1 (inc distance))]
     (case direction
-      "R" (update head 0 + distance)
-      "L" (update head 0 - distance)
-      "U" (update head 1 + distance)
-      "D" (update head 1 - distance))))
+      "R"  ( (move-in-direction head 0 +) intermediate-steps)
+      "L"((move-in-direction head 0 -) intermediate-steps)
+      "U"((move-in-direction head 1 +) intermediate-steps)
+      "D"((move-in-direction head 1 -) intermediate-steps))))
 
 
-(def relative-poses (for [x (range -1 2)
-                          y (range -1 2)]
-                      [x y]))
+;; (def relative-poses (for [x (range -1 2)
+;;                           y (range -1 2)]
+;;                       [x y]))
 
-
-(defn touching? [head tail]
-  (let [next-to-head (set (map (partial map + head) relative-poses))]
-    (next-to-head tail)))
+(defn touching? [[a b :as head] [c d :as tail]]
+  (let [x (- c a)
+        y (- d b)
+        distance (+ (Math/pow x 2) (Math/pow y 2))]
+    (<= distance 2)))
 
 (defn- same-column? [[a b] [c d]]
   (= a c))
@@ -73,20 +78,38 @@
   (cond
     (north-east? head tail) (gen-poses a (inc b) d identity)
     (south-east? head tail) (gen-poses a (inc d) b  identity)
-    (north-west? head tail) (gen-poses  a (inc b) d identity)
+    (north-west? head tail) (gen-poses a (inc b) d identity)
     (south-west? head tail) (gen-poses a (inc d) b identity)))
 
+(defn correct-pos [num]
+  (if (pos? num)
+    (Math/ceil num)
+    (Math/floor num)))
+
 (defn- positions-touched [head tail]
-  (cond
+  (->> tail
+       (map - head)
+       (map (partial * 0.5))
+       (map correct-pos)
+       (map + tail)
+       (map int))
+  #_(cond
     (same-column? head tail) (gen-column-poses head tail)
     (same-row? head tail) (gen-row-poses head tail)
     :else  (gen-diagonal-poses head tail)))
 
+(int 2.0)
+
 (defn move-tail [[head tail]]
 (if (touching? head tail)
-  []
+  tail
  (positions-touched head tail)))
 
+(positions-touched [0 0] [1 2])
+(map - [2 0] [2 2])
+(map - [0 0] [1 2])
+(map - [0 0] [1 2])
+(map #(Math/ceil %) (map (partial * 0.5) [-1 -2]))
 (north-east?  [0 2] [4 3] )
 (move-tail [ [0 2] [4 3] ])
 (touching? [0 2] [4 3])
