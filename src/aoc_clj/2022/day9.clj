@@ -131,3 +131,40 @@
        count) )
 
 (set [ [1 2] '(1 2) [1 3]])
+(defn gen-poses* [motions]
+  (->> motions
+       (follow-motions [[0 0] []])
+       second
+       #_#_( (comp set second))
+       count) )
+
+
+
+(gen-poses* ["R 4"
+                     "U 4"
+                     "L 3"
+                     "D 1"
+                     "R 4"
+                     "D 1"
+                     "L 5"
+                     "R 2"])
+
+                                        ; tail anf tail pos always at default
+; head-positions chaange too match tail positioons
+
+(defn follow-motion* [head-positions state]
+                                        ;(conj
+  (second (reduce
+           (fn [[tail-pos tail-history] head-pos]
+             (let [new-pos (move-tail [head-pos tail-pos])]
+               [new-pos (conj tail-history new-pos)]))
+           state
+           head-positions)))
+
+(defn positions-visited-many-knots [motions]
+  (let [head-poses (gen-poses* motions)]
+    (->> (repeat 8 [[0 0] []])
+         (reduce follow-motion* head-poses)
+         set
+         count)))
+

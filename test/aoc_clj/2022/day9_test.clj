@@ -20,6 +20,16 @@
    "R 2"])
 input
 
+(def large-sample
+  ["R 5"
+   "U 8"
+   "L 8"
+   "D 3"
+   "R 17"
+   "D 10"
+   "L 25"
+   "U 20"])
+
 (t/deftest move-head-test
   (t/is (= [[1 0] [2 0] [3 0][4 0]]
            (sut/move-head [0 0] "R 4")))
@@ -100,5 +110,12 @@ input
 (t/deftest positions-visited-test
   (t/is (= 13
            (sut/positions-visited sample)))
-  (t/is (= 13
+  (t/is (= 6236
            (sut/positions-visited input))) )
+
+(t/deftest positions-visited-many-knots-test
+  (t/is (= 1
+           (sut/positions-visited-many-knots sample)))
+  (t/is (= 36
+           (sut/positions-visited-many-knots large-sample))))
+
