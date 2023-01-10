@@ -97,14 +97,12 @@
 
 
 (defn follow-motion [[tail tail-positions :as tail-info] head-positions]
-  ;(conj
    (reduce
    (fn [[tail-pos tail-history] head-pos]
      [(move-tail [head-pos tail-pos])
       (conj tail-history (move-tail [head-pos tail-pos]))])
    [tail tail-positions]
-   head-positions)
-   #_(last head-positions))
+   head-positions))
 
                                         ;destructure so last alreadt part of head-positions?
 
@@ -114,7 +112,7 @@
    (fn [[head-positions head] motion]
      (let [new-poses (move-head head motion)
            new-head (last new-poses)]
-     [(conj head-positions new-poses) new-head]))
+     [(concat head-positions new-poses) new-head]))
    [[] [0 0]]
    motions)))
 
@@ -124,33 +122,21 @@
    [tail tail-poses]
    (gen-head-poses motions)))
 
-(defn positions-visited [motions]
-  (->> motions
-       (follow-motions [[0 0] []])
-       ( (comp set second))
-       count) )
+;; (defn positions-visited [motions]
+;;   (->> motions
+;;        gen-head-poses
+;;        (follow-motion [[0 0] []])
+;;        ( (comp set second))
+;;        count) )
 
-(set [ [1 2] '(1 2) [1 3]])
-(defn gen-poses* [motions]
-  (->> motions
-       (follow-motions [[0 0] []])
-       second
-       #_#_( (comp set second))
-       count) )
+;; (defn gen-poses* [motions]
+;;   (->> motions
+;;        (follow-motions [[0 0] []])
+;;        second
+;;        #_#_( (comp set second))
+;;        count) )
 
 
-
-(gen-poses* ["R 4"
-                     "U 4"
-                     "L 3"
-                     "D 1"
-                     "R 4"
-                     "D 1"
-                     "L 5"
-                     "R 2"])
-
-                                        ; tail anf tail pos always at default
-; head-positions chaange too match tail positioons
 
 (defn follow-motion* [head-positions state]
                                         ;(conj
@@ -161,10 +147,23 @@
            state
            head-positions)))
 
-(defn positions-visited-many-knots [motions]
-  (let [head-poses (gen-poses* motions)]
-    (->> (repeat 8 [[0 0] []])
+(defn positions-visited [knots motions]
+  (let [head-poses ((comp second (partial follow-motion [[0 0] []]) gen-head-poses) motions)]
+    (->> (repeat (- knots 2) [[0 0] []])
          (reduce follow-motion* head-poses)
          set
          count)))
+
+(def positions-visited-2-knots
+  (partial positions-visited 2))
+
+(def positions-visited-10-knots
+  (partial positions-visited 10))
+
+;; (defn positions-visited-many-knots [motions]
+;;   (let [head-poses ((comp second (partial follow-motion [[0 0] []]) gen-head-poses) motions)]
+;;     (->> (repeat 8 [[0 0] []])
+;;          (reduce follow-motion* head-poses)
+;;          set
+;;          count)))
 

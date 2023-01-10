@@ -95,7 +95,7 @@ input
             [[3 0] [ [0 0] [1 0] [2 0] [3 0]]] [[4 1] [4 2] [4 3] [4 4]]))))
 
 (t/deftest gen-head-poses-test
-  (t/is (= [ [ [1 0] [2 0] [3 0] [4 0] ] [ [4 1] [4 2] [4 3] [4 4] ]]
+  (t/is (= [ [1 0] [2 0] [3 0] [4 0]  [4 1] [4 2] [4 3] [4 4] ]
            (sut/gen-head-poses ["R 4"
                                 "U 4"]))))
 
@@ -105,17 +105,16 @@ input
   (t/is (= [ [4 3] [[0 0] [1 0] [2 0] [3 0] [3 0] [4 1] [4 2] [4 3]]]
            (sut/follow-motions [[0 0] []] ["R 4"
                                           "U 4"]))))
-(sut/follow-motions [[0 0] []] sample)
 
 (t/deftest positions-visited-test
   (t/is (= 13
-           (sut/positions-visited sample)))
+           (sut/positions-visited-2-knots sample)))
   (t/is (= 6236
-           (sut/positions-visited input))) )
+           (sut/positions-visited-2-knots input))) )
 
 (t/deftest positions-visited-many-knots-test
   (t/is (= 1
-           (sut/positions-visited-many-knots sample)))
+           (sut/positions-visited-10-knots sample)))
   (t/is (= 36
-           (sut/positions-visited-many-knots large-sample))))
+           (sut/positions-visited-10-knots large-sample))))
 
