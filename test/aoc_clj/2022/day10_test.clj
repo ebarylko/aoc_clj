@@ -173,9 +173,5 @@
   (t/is (= 18 (sut/sum-cycles sample 100)))
   (t/is (= 21 (sut/sum-cycles sample 140)))
   (t/is (= 16 (sut/sum-cycles sample 180)))
-  (t/is (= 18 (sut/sum-cycles sample 220)))
-  )
+  (t/is (= 18 (sut/sum-cycles sample 220))))
 
-(take-while #(sut/cycles-left? 2 %) sample)
-(sut/sum-cycles sample 20)
-(sut/sum-cycles (drop 109 sample) 41)
