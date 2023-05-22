@@ -50,3 +50,19 @@
   [instrucs cycles]
   (first (reduce cycles-val [1 cycles] instrucs)))
 
+(defn signal-strength
+  "Pre: Takes a series of instructions and the number of cycles N
+  Post: Returns the product of the value of the register at cycle N and N"
+  [instr cycles]
+  (->> cycles
+       (sum-cycles instr)
+       (* cycles)))
+
+(def important-cycles
+  [20 60 100 140 180 220])
+
+(defn sum-signal-strengths
+  "Pre: Takes a series of instuctions
+  Post: Returns the sum of the signal strengths at the 20th, 60th, 100th, 140th, 180th, and 220th cycle"
+  [instr]
+(apply + (map (partial signal-strength instr) important-cycles)))

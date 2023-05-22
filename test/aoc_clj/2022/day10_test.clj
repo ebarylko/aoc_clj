@@ -175,3 +175,9 @@
   (t/is (= 16 (sut/sum-cycles sample 180)))
   (t/is (= 18 (sut/sum-cycles sample 220))))
 
+
+(t/deftest sum-signal-strengths-test
+  (t/is (= 13140 (sut/sum-signal-strengths sample))))
+
+(t/deftest sum-signal-strengths-test-input
+  (t/is (= 16480 (sut/sum-signal-strengths input))))
