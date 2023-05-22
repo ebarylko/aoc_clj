@@ -6,8 +6,7 @@
 (def input
   (->> "resources/2022/day9.txt"
        slurp
-       s/split-lines
-  ))
+       s/split-lines))
 
 (def sample
   ["R 4"
@@ -101,10 +100,6 @@ input
 
 (sut/gen-head-poses sample)
 
-(t/deftest follow-motions-test
-  (t/is (= [ [4 3] [[0 0] [1 0] [2 0] [3 0] [3 0] [4 1] [4 2] [4 3]]]
-           (sut/follow-motions [[0 0] []] ["R 4"
-                                          "U 4"]))))
 
 (t/deftest positions-visited-test
   (t/is (= 13
@@ -116,5 +111,7 @@ input
   (t/is (= 1
            (sut/positions-visited-10-knots sample)))
   (t/is (= 36
-           (sut/positions-visited-10-knots large-sample))))
+           (sut/positions-visited-10-knots large-sample)))
+  (t/is (= 2449
+           (sut/positions-visited-10-knots input))) )
 
