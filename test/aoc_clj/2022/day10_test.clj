@@ -181,3 +181,6 @@
 
 (t/deftest sum-signal-strengths-test-input
   (t/is (= 16480 (sut/sum-signal-strengths input))))
+
+(t/deftest draw-addx-line-test
+  (t/is (= [[["#"] ["#"]] 16 2] (sut/draw-addx-line [] 1 0 15))))

@@ -62,7 +62,49 @@
   [20 60 100 140 180 220])
 
 (defn sum-signal-strengths
-  "Pre: Takes a series of instuctions
+  "Pre: Takes a series of instructions
   Post: Returns the sum of the signal strengths at the 20th, 60th, 100th, 140th, 180th, and 220th cycle"
   [instr]
 (apply + (map (partial signal-strength instr) important-cycles)))
+
+(def generate-empty-line
+  (repeat 40 ["."]))
+
+(defn gen-sprite-loc
+  [pos]
+ #{(dec pos) pos (inc pos)})
+
+(defn sprite-at-pos?
+  [sprite-pos cyc]
+  (sprite-pos cyc))
+
+
+(defn draw-noop-line
+  "Pre: Takes a line, position of the sprite, and the cycle
+  Returns the line with the postition of the sprite noted, the position of the sprite, and the current cycle"
+  [line pos cyc]
+  (let [sprite-pos (gen-sprite-loc pos)]
+    (if (sprite-at-pos? sprite-pos cyc)
+      [(conj line ["#"]) pos (inc cyc)]
+      [(conj line ["."]) pos (inc cyc)])))
+
+(defn draw-addx-line
+  "Pre: Takes a line, position of the sprite, the cycle, and the position to add to the sprite
+  Returns the line with the postition of the sprite noted, the new position of the sprite, and the current cycle"
+  [line pos cyc instr-val]
+  (let [[new-line old-pos new-cyc ] (draw-noop-line line pos cyc)]
+    (update-in (draw-noop-line new-line old-pos new-cyc) [1] + instr-val)))
+
+#_(defn draw-line
+  "Pre: Takes a line, the position of the sprite, the cycle, and the instruction
+  Post: Returns the line with the position of the sprite noted at the cycles for which the instruction occured, the position of the sprite, and the cycle"
+  [line pos cyc instr]
+  (if (noop? instr)
+    (draw-noop-line line pos cyc)
+    (draw-addx-line line pos cyc (parse-instruction-value instr)))
+  )
+
+(conj [[2]] 3)
+(flatten [["."] "#"])
+(#{2 3} 2)
+(draw-noop-line [] 11 12)
