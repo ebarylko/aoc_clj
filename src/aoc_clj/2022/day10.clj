@@ -93,15 +93,16 @@
   Returns the line with the postition of the sprite noted, the new position of the sprite, and the current cycle"
   [line pos cyc instr-val]
   (let [[new-line old-pos new-cyc ] (draw-noop-line line pos cyc)]
-    (update-in (draw-noop-line new-line old-pos new-cyc) [1] + instr-val)))
+    (update-in (draw-noop-line new-line old-pos (mod new-cyc 40)) [1] + instr-val)))
 
 (defn draw-line
   "Pre: Takes a line, the position of the sprite, the cycle, and the instruction
   Post: Returns the line with the position of the sprite noted at the cycles for which the instruction occured, the position of the sprite, and the cycle"
   [[line pos cyc] instr]
+  (println cyc instr pos line)
   (if (noop? instr)
-    (draw-noop-line line pos cyc)
-    (draw-addx-line line pos cyc (parse-instruction-value instr))))
+    (draw-noop-line line pos (mod cyc 40))
+    (draw-addx-line line pos (mod cyc 40) (parse-instruction-value instr))))
 
 (defn draw-lines
   "Pre: takes a series of instructions, the starting position of the sprite, and the starting cycle
@@ -109,17 +110,18 @@
   [instrucs pos cyc]
   (first (reduce draw-line [[] 1 0] instrucs)))
 
-(defn render-lines
+(defn show-lines
 "Pre: takes a series of instructions, the starting position of the sprite, and the starting cycle
   Post: returns the line after following the instructions and nting the position of the sprite at every one."
-  []
+  [instrucs pos cyc]
+  (for [line (-> (draw-lines instrucs pos cyc)
+      flatten
+      #_((partial apply str))
+      ((partial partition 40)))]
+   (println line)))
 
-  )
-(conj [[2]] 3)
-(flatten [["."] "#"])
-(#{2 3} 2)
-(draw-noop-line [] 11 12)
-(draw-line (draw-line [[] 1 0] "addx 15 ")
-           "addx -11 ")
 
 (draw-lines ["addx 15"] 1 0)
+(partial apply str)
+(doseq [nums [1 2 3 5]]
+  (println nums))

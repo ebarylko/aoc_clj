@@ -194,12 +194,9 @@
           ["#"]["#"]["."]["."]
           ["#"]["#"]["."]["."]["#"]] (sut/draw-lines (take 11 sample) 1 0))))
 
-(partition 40 (flatten (sut/draw-lines sample 1 0)))
-"
-##..##..##..##..##..##..##..##..##..##..
-###...###...###...###...###...###...###.
-####....####....####....####....####....
-#####.....#####.....#####.....#####.....
-######......######......######......####
-#######.......#######.......#######.....
-"
+(def a (partition 40 (flatten (sut/draw-lines sample 1 0))))
+(def b (apply str (flatten (sut/draw-lines sample 1 0))))
+(println b)
+(flatten (sut/draw-lines sample 1 0))
+(sut/show-lines sample 1 0)
+(sut/show-lines input 1 0)
