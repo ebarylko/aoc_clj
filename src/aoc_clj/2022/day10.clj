@@ -35,13 +35,19 @@
     (- cycles instr-value)
     nil)))
 
+(defn cycles-left
+  "Pre: takes the amount of cycles left C and the instruction P
+  Post: returns the amount of cycles left after completing P"
+  [cyc instr]
+  (- cyc (instr-val instr)))
+
 (defn cycles-val
   "Pre: takes current cycle value, cycles left, and an instruction
-  Post: if there are cycles left to complete instruction, returns updated cycle value and cycles left. Otherwise returns given cycle value and cycles left"
+  Post: if there are cycles left to complete the instruction, returns updated cycle value and cycles left. Otherwise returns given cycle value and cycles left"
   [[cyc-val cycles] instr]
   (if (cycles-left? cycles instr)
     [(+ cyc-val (parse-instruction-value instr))
-     (cycles-left? cycles instr)]
+     (cycles-left cycles instr)]
     (reduced [cyc-val cycles])))
 
 (defn sum-cycles
@@ -65,7 +71,7 @@
   "Pre: Takes a series of instructions
   Post: Returns the sum of the signal strengths at the 20th, 60th, 100th, 140th, 180th, and 220th cycle"
   [instr]
-(apply + (map (partial signal-strength instr) important-cycles)))
+  (apply + (map (partial signal-strength instr) important-cycles)))
 
 (def generate-empty-line
   (repeat 40 ["."]))
@@ -80,8 +86,8 @@
 
 
 (defn draw-noop-line
-  "Pre: Takes a line, position of the sprite, and the cycle
-  Returns the line with the postition of the sprite noted, the position of the sprite, and the current cycle"
+  "Pre: Takes a line, the position of the sprite, and the cycle
+  Post: Returns the line with the postition of the sprite noted, the current position of the sprite, and the current cycle"
   [line pos cyc]
   (let [sprite-pos (gen-sprite-loc pos)]
     (if (sprite-at-pos? sprite-pos cyc)
@@ -89,39 +95,35 @@
       [(conj line ["."]) pos (inc cyc)])))
 
 (defn draw-addx-line
-  "Pre: Takes a line, position of the sprite, the cycle, and the position to add to the sprite
-  Returns the line with the postition of the sprite noted, the new position of the sprite, and the current cycle"
+  "Pre: Takes a line, position of the sprite, the cycle, and the value to add to the sprite position
+  Post: Returns the line with the postition of the sprite noted, the new position of the sprite, and the current cycle"
   [line pos cyc instr-val]
   (let [[new-line old-pos new-cyc ] (draw-noop-line line pos cyc)]
-    (update-in (draw-noop-line new-line old-pos (mod new-cyc 40)) [1] + instr-val)))
+    (update-in
+     (draw-noop-line new-line old-pos (mod new-cyc 40))
+     [1] + instr-val)))
 
 (defn draw-line
   "Pre: Takes a line, the position of the sprite, the cycle, and the instruction
-  Post: Returns the line with the position of the sprite noted at the cycles for which the instruction occured, the position of the sprite, and the cycle"
+  Post: Returns the line with the positions of the sprite updated, the current position of the sprite, and the cycle"
   [[line pos cyc] instr]
-  (println cyc instr pos line)
   (if (noop? instr)
     (draw-noop-line line pos (mod cyc 40))
     (draw-addx-line line pos (mod cyc 40) (parse-instruction-value instr))))
 
 (defn draw-lines
-  "Pre: takes a series of instructions, the starting position of the sprite, and the starting cycle
-  Post: returns the line after following the instructions and nting the position of the sprite at every one."
-  [instrucs pos cyc]
+  "Pre: takes a series of instructions
+  Post: returns the lines after following the instructions and noting the position of the sprite at every cycle."
+  [instrucs]
   (first (reduce draw-line [[] 1 0] instrucs)))
 
 (defn show-lines
 "Pre: takes a series of instructions, the starting position of the sprite, and the starting cycle
-  Post: returns the line after following the instructions and nting the position of the sprite at every one."
-  [instrucs pos cyc]
-  (for [line (-> (draw-lines instrucs pos cyc)
+  Post: prints the lines after following the instructions and noting the position of the sprite at every cycle."
+  [instrucs]
+  (for [line (-> (draw-lines instrucs)
       flatten
-      #_((partial apply str))
       ((partial partition 40)))]
    (println line)))
 
 
-(draw-lines ["addx 15"] 1 0)
-(partial apply str)
-(doseq [nums [1 2 3 5]]
-  (println nums))
