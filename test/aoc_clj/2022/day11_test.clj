@@ -46,6 +46,14 @@
    ]
 )
 
+(t/deftest remove-empty-space-test
+  (t/is (= '("Starting" "items:" "79," "98")
+           (sut/remove-empty-space "Starting items: 79, 98"))))
+
+(t/deftest parse-operation-test
+  (t/is (= (partial * 19)
+           (sut/parse-operation " Operation: new = old * 19 "))))
+
 (t/deftest monkey-info-test
   (t/is (= {:monkey0 {:items [79 98]
             :operation (partial * 19)
