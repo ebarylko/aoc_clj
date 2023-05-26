@@ -79,9 +79,6 @@
   [pos]
  #{(dec pos) pos (inc pos)})
 
-(map + [1] [1 2 3])
-
-
 
 (defn sprite-at-pos?
   [sprite-pos cyc]
