@@ -50,9 +50,33 @@
   (t/is (= '("Starting" "items:" "79," "98")
            (sut/remove-empty-space "Starting items: 79, 98"))))
 
+(t/deftest determine-operation-test
+  (t/is (= ( (partial + 13) 1)
+           ( (sut/determine-operation "+" "13") 1))))
+
 (t/deftest parse-operation-test
-  (t/is (= (partial * 19)
-           (sut/parse-operation " Operation: new = old * 19 "))))
+  (t/is (= 4.0
+           ( (sut/parse-operation "Operation: new = old * old ") 2))))
+
+
+(sut/remove-empty-space
+ "Operation: new = old * old ")
+
+(t/deftest num-value-test
+  (t/is (= 3 (sut/num-value "3"))))
+
+(t/deftest squaring?-test
+  (t/is (sut/squaring? "*" "old")))
+
+(t/deftest multiplication-or-addition-test
+  (t/is (= * (sut/multiplication-or-addition "*"))))
+
+(t/deftest parse-operation-test
+  (t/is (= 38
+           ((sut/parse-operation " Operation: new = old * 19 ") 2 ))))
+
+(t/deftest test-operation-test
+  (t/is ((sut/test-operation " Test: divisible by 23 ") 23)))
 
 (t/deftest monkey-info-test
   (t/is (= {:monkey0 {:items [79 98]
