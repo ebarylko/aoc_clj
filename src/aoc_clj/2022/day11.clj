@@ -122,3 +122,27 @@
   Post: returns a collection of the form :monkey monkey-info for every monkey"
   [monkeys]
   (into {} (map monkey-info monkeys)))
+
+
+(defn item-shift
+  "Pre: takes a monkey
+  Post: returns the destination of the monkeys items"
+  [monkey]
+  (let [info (first (vals monkey))
+        [items op intr-test success fail] (map info
+                                               [:items
+                                                :op 
+                                                :intr-test 
+                                                :success 
+                                                :fail])]
+    success))
+
+(defn round
+  "Pre: takes a collection of monkeys
+  Post: returns the collection with the updated items list for every monkey"
+  [monkeys]
+  )
+
+
+(into [1 2] [5 2])
+(keys {:as {}})

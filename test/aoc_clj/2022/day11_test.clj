@@ -91,7 +91,32 @@
                       :fail :monkey3}}
            (sut/monkey-info (first sample)))))
 
-( =
- (into {} (map sut/monkey-info sample))
- (sut/all-monkeys sample)
- )
+(t/deftest round-test
+  (t/is {:monkey0 [20 23 27 26]
+         :monkey1 [2080, 25, 167, 207, 401, 1046]
+         :monkey2 []
+         :monkey3 [500 620]
+         }
+(sut/round (sut/all-monkeys sample))))
+(sut/item-shift (sut/monkey-info (first sample)))
+(def a
+ (first (vals
+         (sut/monkey-info (first sample))))
+  )
+
+(map a [:items
+        :op 
+        :intr-test 
+        :success 
+        :fail])
+
+(map #(get
+       (first (vals (sut/monkey-info (first sample))))
+       %)
+     [:items
+      :op 
+      :intr-test 
+      :success 
+      :fail]
+     )
+     
