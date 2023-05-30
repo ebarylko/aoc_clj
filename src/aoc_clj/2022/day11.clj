@@ -87,23 +87,38 @@
         valid-items (map parse-item items)]
     valid-items))
 
+(defn gen-monkey-num
+  "Takes a monkey and its position
+  Post: returns a keyword of the monkey and its position"
+  [monkey]
+  (let [[_ num] (remove-empty-space monkey)]
+    (keyword (str "monkey" (first num)))))
+
+(defn throw-to
+  "Pre: takes a string repesenting which monkey iten should be thrown to
+  Post: returns a keyword of the monkey which item should be thrown to"
+  [s]
+  (let [[_ _ _ _ _ num] (remove-empty-space s)]
+    (keyword (str "monkey" num))))
+
 (defn monkey-info
   "Pre: Takes a collection of information about a monkey, including its starting items, worry level change operation, test, and to which monkeys it throws to
   Post: returns a map with all this information"
   [[monkey-num starting-items operation test if-divisible if-not-divisible]]
-  (let  [[_ num]   (s/split monkey-num #" ")
+  (let  [num   (gen-monkey-num monkey-num)
          items (parse-monkey-items starting-items)
          op (parse-operation operation)
-         interest-test (test-operation test)]
-    {:items items
-     :op op
-     :intr-test interest-test}))
+         interest-test (test-operation test)
+         [success fail] (map throw-to [if-divisible if-not-divisible])]
+    {num
+     {:items items 
+      :op op 
+      :intr-test interest-test
+      :success success
+      :fail fail} }))
 
-(keyword "0:")
-(Integer/parseInt "1")
-(s/includes? "48," ",")
-(apply str (take 2 "48,"))
-(str \4 \8)
-(take 2 "48")
-(s/split "      2 3l" #" ")
-(remove empty? (s/split " Starting items: 79, 60, 97 " #" "))
+(defn all-monkeys
+  "Pre: takes a collection of monkeys
+  Post: returns a collection of the form :monkey monkey-info for every monkey"
+  [monkeys]
+  (into {} (map monkey-info monkeys)))

@@ -58,15 +58,20 @@
   (t/is (= 4.0
            ( (sut/parse-operation "Operation: new = old * old ") 2))))
 
+(t/deftest gen-monkey-num-test
+  (t/is (= :monkey1
+           (sut/gen-monkey-num " Monkey 1: "))))
 
-(sut/remove-empty-space
- "Operation: new = old * old ")
 
 (t/deftest num-value-test
   (t/is (= 3 (sut/num-value "3"))))
 
 (t/deftest squaring?-test
   (t/is (sut/squaring? "*" "old")))
+
+(t/deftest throw-to-test
+  (t/is (= :moneky2
+           (sut/throw-to " If true: throw to monkey 2 "))))
 
 (t/deftest multiplication-or-addition-test
   (t/is (= * (sut/multiplication-or-addition "*"))))
@@ -82,6 +87,11 @@
   (t/is (= {:monkey0 {:items [79 98]
             :operation (partial * 19)
             :test #(zero? (mod % 23))
-            :pass-test :monkey2
-                      :fail-test :monkey3}}
+            :success :monkey2
+                      :fail :monkey3}}
            (sut/monkey-info (first sample)))))
+
+( =
+ (into {} (map sut/monkey-info sample))
+ (sut/all-monkeys sample)
+ )
