@@ -97,26 +97,6 @@
          :monkey2 []
          :monkey3 [500 620]
          }
+
 (sut/round (sut/all-monkeys sample))))
 (sut/item-shift (sut/monkey-info (first sample)))
-(def a
- (first (vals
-         (sut/monkey-info (first sample))))
-  )
-
-(map a [:items
-        :op 
-        :intr-test 
-        :success 
-        :fail])
-
-(map #(get
-       (first (vals (sut/monkey-info (first sample))))
-       %)
-     [:items
-      :op 
-      :intr-test 
-      :success 
-      :fail]
-     )
-     
