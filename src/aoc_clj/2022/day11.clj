@@ -128,41 +128,49 @@
   "pre: takes an operation to apply on an item
   Post: returns a function that will take a worry level and shift it to the updated value"
   [op]
-  (comp #(Math/floor %) #(/ % 3) op))
-
+  (comp int #(Math/floor %) #(/ % 3) op))
 
 
 (defn new-item-destination
+  "Pre: takes a monkey interest test, the monkeys to pass to depending on the outcome of the test, a collection of destinations for the new items, and an item
+  Post: returns the updated monkey items list with the new destination for the item"
+  [test pass fail dest item]
+  (let [monkey-to (if (test item) pass fail)]
+    (update dest monkey-to (fnil conj []) item)))
+
+(defn new-item-destinations
   "Pre: takes a collection of items, a monkey interest test, and the monkeys to throw to if test is passed/failed
   Post: returns the new destination of the items, to which monkeys they go to"
   [items test pass fail]
-
-
-  )
+(reduce (partial new-item-destination test pass fail) {} items ))
 
 (defn item-shift
   "Pre: takes a monkey
-  Post: returns the destination of the monkeys items"
-  [monkey]
-  (let [info (first (vals monkey))
-        [items op intr-test success fail] (map info
-                                               [:items
-                                                :op 
-                                                :intr-test 
-                                                :success 
-                                                :fail])
-        new-item-vals  (map (worry-shift op) items) ]
+  Post: returns the destination of the monkey's items"
+  [{:keys [items op intr-test success fail]}]
+  (let [new-item-vals  (map (worry-shift op) items)]
     (new-item-destinations new-item-vals intr-test success fail)))
+
+(defn new-monkey-lists
+  "Pre: takes a collection of monkeys and a specific monkey
+  Post: returns the collection updated with the new destinations of the items the specific monkey held"
+  [monkeys monkey]
+  (let [items (item-shift (monkey monkeys))]
+    (for [[mon it] items]
+    (-> monkeys
+        (assoc-in [monkey :items] [])
+        (update-in [mon :items] concat it)))))
 
 (defn round
   "Pre: takes a collection of monkeys
   Post: returns the collection with the updated items list for every monkey"
   [monkeys]
-  )
+  (reduce new-monkey-lists monkeys (keys monkeys)))
 
 
-(into [1 2] [5 2])
-(keys {:as {}})
-(/ 1501 3)
-( (worry-shift (partial * 19)) 79)
-(assoc {:ji 1} :jk 23)
+(apply conj [] [1 2 3 4])
+(let [{name :name} {:name "hello"}]
+  name)
+(for [[k v] {:ji :jello}]
+  [k v])
+(concat [74] [1 2 3])

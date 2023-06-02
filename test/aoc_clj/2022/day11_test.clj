@@ -91,6 +91,18 @@
                       :fail :monkey3}}
            (sut/monkey-info (first sample)))))
 
+(t/deftest item-shift-test
+  (t/is (= {:monkey3 [500 620]}
+           (sut/item-shift
+            (:monkey0 (sut/monkey-info (first sample)))
+            ))))
+
+(t/deftest new-monkey-lists-test
+  (t/is (= 10
+           (:monkey3 (first (sut/new-monkey-lists
+            (sut/all-monkeys sample)
+            :monkey0))))))
+
 (t/deftest round-test
   (t/is {:monkey0 [20 23 27 26]
          :monkey1 [2080, 25, 167, 207, 401, 1046]
@@ -100,3 +112,5 @@
 
 (sut/round (sut/all-monkeys sample))))
 (sut/item-shift (sut/monkey-info (first sample)))
+(keys (sut/all-monkeys sample))
+(:monkey0 (sut/all-monkeys sample))
