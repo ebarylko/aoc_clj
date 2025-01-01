@@ -12,3 +12,5 @@ pom.xml.asc
 .hg/
 .#*
 *~undo-tree~
+**/.clj-kondo
+**/.lsp

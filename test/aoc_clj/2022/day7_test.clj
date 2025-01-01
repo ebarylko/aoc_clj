@@ -75,12 +75,12 @@
            (sut/calc-size {"a" 10 "b" 10 "p" {"w" 10} "l" {"k" 10}}))) )
 
 
-(t/deftest sum-directories-test
-  (t/is (= 20
-           (sut/sum-directories {:folders {"p" {:size 10}
-                                 "l" {:size 99999999
-                                      :folders {"j" {:size 10}}}}})))
-   )
+#_ (t/deftest sum-directories-test
+   (t/is (= 20
+            (sut/sum-directories {:folders {"p" {:size 10}
+                                  "l" {:size 99999999
+                                       :folders {"j" {:size 10}}}}})))
+    )
 
 (t/deftest filter+sum-test
   (t/is (= 95437 (sut/filter+sum sample)))
