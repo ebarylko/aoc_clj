@@ -24,3 +24,19 @@
   (->> reports
        (filter is-safe?)
        count))
+
+(defn gen-report-variation
+  [report idx]
+(concat (take (dec idx) report) (drop idx report)))
+
+(defn can-be-made-safe?
+  [report]
+  (->> (range 1 (inc (count report)))
+       (map (partial gen-report-variation report))
+       (some is-safe?)))
+
+(defn num-of-safe-reports* [reports]
+  (->> reports
+       (remove is-safe?)
+       (filter can-be-made-safe?)
+       count))

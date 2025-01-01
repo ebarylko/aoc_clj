@@ -20,8 +20,20 @@
 
 (t/deftest num-of-safe-reports
   (t/is (= 2 (sut/num-of-safe-reports sample)))
-  (t/is (= 2 (sut/num-of-safe-reports input))))
+  (t/is (= 598 (sut/num-of-safe-reports input))))
+
+(t/deftest num-of-safe-reports*
+  (t/is (= 4 (sut/num-of-safe-reports* sample)))
+  (t/is (= 2 (sut/num-of-safe-reports* input))))
 
 (s/split-lines "hi\nwhy")
 (map (partial apply -) (partition 2 1 [1 2 3 4]))
 (< 1 1 4)
+(take 0 [23 8 9 8 9])
+(def a (drop 3 [23 7 4 8 9]) )
+(def b (take 2 [23 7 4 8 9]))
+(concat a b)
+(range 1 8)
+(remove #{1 2} [1 3 2])
+(seq [1])
+(vec (take 3 a))
