@@ -9,8 +9,7 @@
        s/split-lines
        (map #(format "[%s]" %))
        (map read-string)
-       (apply mapv vector)
-       ))
+       (apply mapv vector)))
 
 (def sample
   (->> [[3   4]
