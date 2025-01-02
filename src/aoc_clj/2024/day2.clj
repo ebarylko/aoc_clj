@@ -1,10 +1,11 @@
-(ns aoc-clj.2024.day2)
-
-
+(ns aoc-clj.2024.day2
+  (:require [clojure.math :as m]))
 
 (defn increasing-or-decreasing-seq?
-  [coll]
-(or (every? neg? coll) (every? pos? coll)))
+  [[fst  :as coll]]
+  (let [f #(= (m/signum fst) (m/signum %))]
+    (every? f coll)))
+
 
 (defn levels-differ-gradually?
   [coll]
@@ -12,7 +13,7 @@
 
 (def valid-report? (every-pred increasing-or-decreasing-seq? levels-differ-gradually?))
 
-(defn is-safe?
+(defn safe?
   [report]
   (->> report
        (partition 2 1)
@@ -22,7 +23,7 @@
 (defn num-of-safe-reports
   [reports]
   (->> reports
-       (filter is-safe?)
+       (filter safe?)
        count))
 
 (defn gen-report-variation
@@ -33,10 +34,12 @@
   [report]
   (->> (range 1 (inc (count report)))
        (map (partial gen-report-variation report))
-       (some is-safe?)))
+       (some safe?)))
 
-(defn num-of-safe-reports* [reports]
+(defn num-of-safe-reports*
+  [reports]
   (->> reports
-       (remove is-safe?)
+       (remove safe?)
        (filter can-be-made-safe?)
-       count))
+       count
+       (+ (num-of-safe-reports reports))))
